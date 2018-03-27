@@ -1,0 +1,68 @@
+March 27 createtables in clinic database
+
+use clinic
+create table patients(
+Id int primary key identity not null,
+FirstName Varchar(50) not null,
+LastName Varchar(50) not null,
+FullName AS CONCAT(FirstName,' ',LastName),
+Phone Varchar (10) null,
+Email Varchar (50) null,
+DateOfBirth Date null,
+MedicalCardNo Varchar null,
+UserName Varchar(50) not null,
+LoginPassWord Varchar (50) not null
+
+)
+
+create table doctors(
+Id int primary key identity not null,
+FirstName Varchar(50) not null,
+LastName Varchar(50) not null,
+FullName AS CONCAT(FirstName,' ',LastName),
+Speciality Varchar (50) not null,
+Phone Varchar (10) null,
+Email Varchar (50) null,
+UserName Varchar(50) not null,
+LoginPassWord Varchar (50) not null
+
+
+)
+
+create table availability(
+Id int primary key identity not null,
+DoctorId int FOREIGN KEY REFERENCES doctors(Id) not null,
+Date Date not null,
+AvailableFrom DateTime not null,
+AvailableTo DateTime not null,
+AppointmentDuration int null
+)
+
+create table timeslots(
+Id int primary key identity not null,
+AvailabilityId int foreign key references availability(Id) not null,
+SlotDateTimeStart DateTime,
+SlotDateTimeEnd DateTime,
+SlotDoctorId int,
+IsAvailable bit default 1
+
+
+)
+
+create table appointments(
+Id int primary key identity not null,
+
+PatientId int FOREIGN KEY REFERENCES patients(Id) not null,
+TimeSlotId int foreign key references timeslots(Id) unique not null
+
+)
+
+create table users(
+Id int primary key identity not null,
+UserName varchar (50) not null,
+LoginPassWord varchar (50) not null,
+UserRole varchar(10) not null CHECK (UserRole IN('Admin','Doctor','Patient')),
+DoctorId int FOREIGN KEY REFERENCES doctors(Id)  not null,
+PatientId int FOREIGN KEY REFERENCES patients(Id) not null,
+
+)

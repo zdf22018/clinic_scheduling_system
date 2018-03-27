@@ -1,0 +1,119 @@
+Doctor HAS MANY Appointment
+Appointment HAS ONE Doctor (usually... :) )
+Appointment HAS ONE Customer
+Customer HAS MANY Appointment
+The appointment would have time and maybe location and some other details. As long as there is no Customer assigned to Appointment it would be thrown in results as AVAILABLE.
+
+To make it more accurate but more complicated you can create TimeSlot entity and it would HAS MANY appointments and Appointment would have one TimeSlot. You would have to set then kind of CRON job to generate slots for upcoming e.g. Month but do that e.g. In the middle of the month to keep 4 weeks or more in advance.
+
+You can easily design this scheme in MySQL work bench.
+
+
+
+to generate slots
+
+I have a table named #MySchedule with columns StartTime, EndTime and duration.
+
+What I need is a query to get all time Slots for each row in MySchedule between these StartTime and EndTime based on the duration column.
+
+MySchedule table:
+create table #MySchedule
+(
+startTime datetime, 
+endtime datetime,
+duration int
+)
+
+insert into #MySchedule
+select '1/3/15 10:00 AM' startTime ,'1/3/15 4:00 PM' endTime ,15 duration 
+union all 
+select '1/4/15 10:00 AM' startTime ,'1/4/15 2:00 PM' endTime ,30 duration 
+union all 
+select '1/5/15 10:00 AM' startTime ,'1/5/15 4:00 PM' endTime ,45 duration 
+Expected output:
+    Slots   StartTime           EndTime
+    1       '1/3/15 10:00 AM'   '1/3/15 10:15 AM'
+    2       '1/3/15 10:15 AM'   '1/3/15 10:30 AM'
+    3       '1/3/15 10:30 AM'   '1/3/15 10:45 AM'
+    4       '1/3/15 10:45 AM'   '1/3/15 11:00 AM'
+    5       '1/3/15 11:00 AM'   '1/3/15 11:15 AM'
+    .       ...                 ...
+    .       '1/3/15 3:45 PM'    '1/3/15 4:00 PM'
+    ---------------------------------------------
+    .       '1/4/15 10:00 AM'   '1/4/15 10:30 AM'
+    .       '1/4/15 10:30 AM'   '1/4/15 11:00 AM'
+    .       ...                 ...
+    .       '1/4/15 13:30 AM'   '1/4/15 14:00 PM'
+    ---------------------------------------------
+    .       '1/5/15 10:00 AM'   '1/5/15 10:45 AM'
+    .       '1/5/15 10:45 AM'   '1/5/15 11:30 AM'
+    .       ...                 ...
+    .       '1/5/15 15:15 AM'   '1/5/15 16:00 PM'
+sql-server sql-server-2008
+shareimprove this question
+edited Feb 17 '16 at 13:22
+
+Julien Vavasseur
+8,88021736
+asked Feb 17 '16 at 11:05
+
+AA.SC
+2,69431236
+add a comment
+1 Answer
+active oldest votes
+up vote
+1
+down vote
+accepted
+This will work for up to 100 intervals. It can be easily expanded to 1000 by adding another CROSS JOIN inc, and so on for 10.000 ...
+
+It supposes that the duration is in minutes.
+
+CTE inc creates a derived table with 10 rows with the ten 1.
+CTE list CROSS JOIN CTE inc twice and creates 10*10 rows.
+It also creates a list of number from 1 to 100 (or 1000...) with ROW_NUMBER().
+These numbers are then added to @starttime until it reach @endtime.
+Query:
+DECLARE @schedule TABLE(Id int identity(0, 1), StartTime datetime2, EndTime datetime2, Duration int);
+INSERT INTO @schedule(StartTime, EndTime, Duration) VALUES
+    ('20150103 10:00', '20150103 16:00', 15)
+    , ('20150104 10:00', '20150104 14:00', 30)
+    , ('20150105 10:00', '20150105 16:00', 45);
+
+
+WITH inc AS (
+    SELECT n FROM (values(1), (1), (1), (1), (1), (1), (1), (1), (1), (1)) as i(n)
+), list AS(
+    SELECT n = ROW_NUMBER() OVER(ORDER BY (SELECT 1)) 
+    FROM inc i10
+    CROSS JOIN inc i100
+    --CROSS JOIN inc i1000
+)
+SELECT s.id, l.n
+    , DATEADD(minute, s.duration*(n-1), s.StartTime) as StartTime
+    , DATEADD(minute, s.duration*n, s.StartTime) as EndTime
+    , DATEDIFF(minute, s.StartTime, s.EndTime)/s.Duration
+FROM @schedule s
+INNER JOIN list l ON
+      l.n <= DATEDIFF(minute, s.StartTime, s.EndTime)/s.Duration
+ORDER BY s.Id, l.n 
+Output:
+StartTime                   | EndTime
+2015-01-03 10:00:00.0000000 | 2015-01-03 10:15:00.0000000
+2015-01-03 10:15:00.0000000 | 2015-01-03 10:30:00.0000000
+...                         | ...
+2015-01-03 15:30:00.0000000 | 2015-01-03 15:45:00.0000000
+2015-01-03 15:45:00.0000000 | 2015-01-03 16:00:00.0000000
+----------------------------|----------------------------    
+2015-01-04 10:00:00.0000000 | 2015-01-04 10:30:00.0000000
+2015-01-04 10:30:00.0000000 | 2015-01-04 11:00:00.0000000
+...                         | ...
+2015-01-04 13:00:00.0000000 | 2015-01-04 13:30:00.0000000
+2015-01-04 13:30:00.0000000 | 2015-01-04 14:00:00.0000000
+----------------------------|----------------------------    
+2015-01-05 10:00:00.0000000 | 2015-01-05 10:45:00.0000000
+2015-01-05 10:45:00.0000000 | 2015-01-05 11:30:00.0000000
+...                         | ...
+2015-01-05 14:30:00.0000000 | 2015-01-05 15:15:00.0000000
+2015-01-05 15:15:00.0000000 | 2015-01-05 16:00:00.0000000

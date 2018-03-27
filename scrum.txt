@@ -1,2 +1,18 @@
 day 1
 decided to do clinic scheduling system
+
+
+day2
+
+dongfan:
+to do:
+discuss proposal and finalize
+finalize database schema design
+create necessary triggers or stored procedure in database
+
+create the project with three executable
+doctor
+patient
+admin
+
+

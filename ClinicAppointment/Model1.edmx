@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="clinicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="appointments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="TimeSlotId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="availability">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DoctorId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="AvailableFrom" Type="datetime" Nullable="false" />
+          <Property Name="AvailableTo" Type="datetime" Nullable="false" />
+          <Property Name="AppointmentDuration" Type="int" />
+        </EntityType>
+        <EntityType Name="doctors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FullName" Type="varchar" MaxLength="101" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Speciality" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginPassWord" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="patients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FullName" Type="varchar" MaxLength="101" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DateOfBirth" Type="date" />
+          <Property Name="MedicalCardNo" Type="varchar" MaxLength="1" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginPassWord" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="timeslots">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AvailabilityId" Type="int" Nullable="false" />
+          <Property Name="SlotStart" Type="datetime" />
+          <Property Name="SlotEnd" Type="datetime" />
+          <Property Name="SlotDoctorId" Type="int" />
+          <Property Name="IsAvailable" Type="bit" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginPassWord" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserRole" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DoctorId" Type="int" />
+          <Property Name="PatientId" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'clinic.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <Association Name="FK__appointme__Patie__114A936A">
+          <End Role="patients" Type="Self.patients" Multiplicity="1" />
+          <End Role="appointments" Type="Self.appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="appointments">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__appointme__TimeS__123EB7A3">
+          <End Role="timeslots" Type="Self.timeslots" Multiplicity="1" />
+          <End Role="appointments" Type="Self.appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeslots">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="appointments">
+              <PropertyRef Name="TimeSlotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__availabil__Docto__72C60C4A">
+          <End Role="doctors" Type="Self.doctors" Multiplicity="1" />
+          <End Role="availability" Type="Self.availability" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="doctors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="availability">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__timeslots__Avail__0C85DE4D">
+          <End Role="availability" Type="Self.availability" Multiplicity="1" />
+          <End Role="timeslots" Type="Self.timeslots" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="availability">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="timeslots">
+              <PropertyRef Name="AvailabilityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__users__DoctorId__160F4887">
+          <End Role="doctors" Type="Self.doctors" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="doctors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__users__PatientId__17036CC0">
+          <End Role="patients" Type="Self.patients" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="clinicModelStoreContainer">
+          <EntitySet Name="appointments" EntityType="Self.appointments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="availability" EntityType="Self.availability" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="doctors" EntityType="Self.doctors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="patients" EntityType="Self.patients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="timeslots" EntityType="Self.timeslots" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__appointme__Patie__114A936A" Association="Self.FK__appointme__Patie__114A936A">
+            <End Role="patients" EntitySet="patients" />
+            <End Role="appointments" EntitySet="appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__appointme__TimeS__123EB7A3" Association="Self.FK__appointme__TimeS__123EB7A3">
+            <End Role="timeslots" EntitySet="timeslots" />
+            <End Role="appointments" EntitySet="appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__availabil__Docto__72C60C4A" Association="Self.FK__availabil__Docto__72C60C4A">
+            <End Role="doctors" EntitySet="doctors" />
+            <End Role="availability" EntitySet="availability" />
+          </AssociationSet>
+          <AssociationSet Name="FK__timeslots__Avail__0C85DE4D" Association="Self.FK__timeslots__Avail__0C85DE4D">
+            <End Role="availability" EntitySet="availability" />
+            <End Role="timeslots" EntitySet="timeslots" />
+          </AssociationSet>
+          <AssociationSet Name="FK__users__DoctorId__160F4887" Association="Self.FK__users__DoctorId__160F4887">
+            <End Role="doctors" EntitySet="doctors" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__users__PatientId__17036CC0" Association="Self.FK__users__PatientId__17036CC0">
+            <End Role="patients" EntitySet="patients" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="clinicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="appointment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="TimeSlotId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="patient" Relationship="Self.FK__appointme__Patie__114A936A" FromRole="appointments" ToRole="patients" />
+          <NavigationProperty Name="timeslot" Relationship="Self.FK__appointme__TimeS__123EB7A3" FromRole="appointments" ToRole="timeslots" />
+        </EntityType>
+        <EntityType Name="availability">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DoctorId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="AvailableFrom" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AvailableTo" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AppointmentDuration" Type="Int32" />
+          <NavigationProperty Name="doctor" Relationship="Self.FK__availabil__Docto__72C60C4A" FromRole="availability" ToRole="doctors" />
+          <NavigationProperty Name="timeslots" Relationship="Self.FK__timeslots__Avail__0C85DE4D" FromRole="availability" ToRole="timeslots" />
+        </EntityType>
+        <EntityType Name="doctor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="101" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Speciality" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoginPassWord" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="availabilities" Relationship="Self.FK__availabil__Docto__72C60C4A" FromRole="doctors" ToRole="availability" />
+          <NavigationProperty Name="users" Relationship="Self.FK__users__DoctorId__160F4887" FromRole="doctors" ToRole="users" />
+        </EntityType>
+        <EntityType Name="patient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="101" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+          <Property Name="MedicalCardNo" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoginPassWord" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="appointments" Relationship="Self.FK__appointme__Patie__114A936A" FromRole="patients" ToRole="appointments" />
+          <NavigationProperty Name="users" Relationship="Self.FK__users__PatientId__17036CC0" FromRole="patients" ToRole="users" />
+        </EntityType>
+        <EntityType Name="timeslot">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AvailabilityId" Type="Int32" Nullable="false" />
+          <Property Name="SlotStart" Type="DateTime" Precision="3" />
+          <Property Name="SlotEnd" Type="DateTime" Precision="3" />
+          <Property Name="SlotDoctorId" Type="Int32" />
+          <Property Name="IsAvailable" Type="Boolean" />
+          <NavigationProperty Name="appointments" Relationship="Self.FK__appointme__TimeS__123EB7A3" FromRole="timeslots" ToRole="appointments" />
+          <NavigationProperty Name="availability" Relationship="Self.FK__timeslots__Avail__0C85DE4D" FromRole="timeslots" ToRole="availability" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoginPassWord" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserRole" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DoctorId" Type="Int32" />
+          <Property Name="PatientId" Type="Int32" />
+          <NavigationProperty Name="doctor" Relationship="Self.FK__users__DoctorId__160F4887" FromRole="users" ToRole="doctors" />
+          <NavigationProperty Name="patient" Relationship="Self.FK__users__PatientId__17036CC0" FromRole="users" ToRole="patients" />
+        </EntityType>
+        <Association Name="FK__appointme__Patie__114A936A">
+          <End Role="patients" Type="Self.patient" Multiplicity="1" />
+          <End Role="appointments" Type="Self.appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="appointments">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__appointme__TimeS__123EB7A3">
+          <End Role="timeslots" Type="Self.timeslot" Multiplicity="1" />
+          <End Role="appointments" Type="Self.appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeslots">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="appointments">
+              <PropertyRef Name="TimeSlotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__availabil__Docto__72C60C4A">
+          <End Role="doctors" Type="Self.doctor" Multiplicity="1" />
+          <End Role="availability" Type="Self.availability" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="doctors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="availability">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__timeslots__Avail__0C85DE4D">
+          <End Role="availability" Type="Self.availability" Multiplicity="1" />
+          <End Role="timeslots" Type="Self.timeslot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="availability">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="timeslots">
+              <PropertyRef Name="AvailabilityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__users__DoctorId__160F4887">
+          <End Role="doctors" Type="Self.doctor" Multiplicity="0..1" />
+          <End Role="users" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="doctors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__users__PatientId__17036CC0">
+          <End Role="patients" Type="Self.patient" Multiplicity="0..1" />
+          <End Role="users" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clinicEntities_db" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="appointments" EntityType="Self.appointment" />
+          <EntitySet Name="availabilities" EntityType="Self.availability" />
+          <EntitySet Name="doctors" EntityType="Self.doctor" />
+          <EntitySet Name="patients" EntityType="Self.patient" />
+          <EntitySet Name="timeslots" EntityType="Self.timeslot" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK__appointme__Patie__114A936A" Association="Self.FK__appointme__Patie__114A936A">
+            <End Role="patients" EntitySet="patients" />
+            <End Role="appointments" EntitySet="appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__appointme__TimeS__123EB7A3" Association="Self.FK__appointme__TimeS__123EB7A3">
+            <End Role="timeslots" EntitySet="timeslots" />
+            <End Role="appointments" EntitySet="appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__availabil__Docto__72C60C4A" Association="Self.FK__availabil__Docto__72C60C4A">
+            <End Role="doctors" EntitySet="doctors" />
+            <End Role="availability" EntitySet="availabilities" />
+          </AssociationSet>
+          <AssociationSet Name="FK__timeslots__Avail__0C85DE4D" Association="Self.FK__timeslots__Avail__0C85DE4D">
+            <End Role="availability" EntitySet="availabilities" />
+            <End Role="timeslots" EntitySet="timeslots" />
+          </AssociationSet>
+          <AssociationSet Name="FK__users__DoctorId__160F4887" Association="Self.FK__users__DoctorId__160F4887">
+            <End Role="doctors" EntitySet="doctors" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__users__PatientId__17036CC0" Association="Self.FK__users__PatientId__17036CC0">
+            <End Role="patients" EntitySet="patients" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(clinicModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(clinicModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="clinicModelStoreContainer" CdmEntityContainer="clinicEntities_db">
+          <EntitySetMapping Name="appointments">
+            <EntityTypeMapping TypeName="clinicModel.appointment">
+              <MappingFragment StoreEntitySet="appointments">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="TimeSlotId" ColumnName="TimeSlotId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="availabilities">
+            <EntityTypeMapping TypeName="clinicModel.availability">
+              <MappingFragment StoreEntitySet="availability">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="AvailableFrom" ColumnName="AvailableFrom" />
+                <ScalarProperty Name="AvailableTo" ColumnName="AvailableTo" />
+                <ScalarProperty Name="AppointmentDuration" ColumnName="AppointmentDuration" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="doctors">
+            <EntityTypeMapping TypeName="clinicModel.doctor">
+              <MappingFragment StoreEntitySet="doctors">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Speciality" ColumnName="Speciality" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LoginPassWord" ColumnName="LoginPassWord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="patients">
+            <EntityTypeMapping TypeName="clinicModel.patient">
+              <MappingFragment StoreEntitySet="patients">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="MedicalCardNo" ColumnName="MedicalCardNo" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LoginPassWord" ColumnName="LoginPassWord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timeslots">
+            <EntityTypeMapping TypeName="clinicModel.timeslot">
+              <MappingFragment StoreEntitySet="timeslots">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AvailabilityId" ColumnName="AvailabilityId" />
+                <ScalarProperty Name="SlotStart" ColumnName="SlotStart" />
+                <ScalarProperty Name="SlotEnd" ColumnName="SlotEnd" />
+                <ScalarProperty Name="SlotDoctorId" ColumnName="SlotDoctorId" />
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="clinicModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LoginPassWord" ColumnName="LoginPassWord" />
+                <ScalarProperty Name="UserRole" ColumnName="UserRole" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="clinicModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="clinicModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="clinicModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="clinicModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="clinicModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="clinicModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="clinicModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="clinicModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="clinicModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

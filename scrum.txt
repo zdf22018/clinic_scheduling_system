@@ -15,4 +15,13 @@ doctor
 patient
 admin
 
+day 3 March 28
+Dongfan
+finalize the database schema
+created two triggers to automate the time slots and user insert
+found a third party devexpress schedulor product to use
+
+to do
+understand the multiple projects inside one solution 
+and then set up the project properly
 

@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\clinic\clinic_scheduling_system\ClinicAppointment\obj\Debug\
+C:\Users\ITC\Documents\clinic\ClinicAppointment\obj\Debug\
 ClinicAppointment
 none
 false
 DEBUG;TRACE
-D:\clinic\clinic_scheduling_system\ClinicAppointment\App.xaml
+C:\Users\ITC\Documents\clinic\ClinicAppointment\App.xaml
 4482546303
 
-121534921721
-14-379490533
+121585970835
+171326349172
 Doctor.xaml;MainWindow.xaml;Admin.xaml;Patient.xaml;
 
 False

@@ -1,0 +1,67 @@
+March 28 createtables in clinicb database
+
+use clinicb
+create table patients(
+Id int primary key identity not null,
+FirstName Varchar(50) not null,
+LastName Varchar(50) not null,
+FullName AS CONCAT(FirstName,' ',LastName),
+Phone Varchar (10) null,
+Email Varchar (50) null,
+DateOfBirth Date null,
+MedicalCardNo Varchar null,
+UserName Varchar(50) not null,
+LoginPassWord Varchar (50) not null
+
+)
+
+create table doctors(
+Id int primary key identity not null,
+FirstName Varchar(50) not null,
+LastName Varchar(50) not null,
+FullName AS CONCAT(FirstName,' ',LastName),
+Speciality Varchar (50) not null,
+Phone Varchar (10) null,
+Email Varchar (50) null,
+UserName Varchar(50) not null,
+LoginPassWord Varchar (50) not null
+
+
+)
+
+create table availability(
+Id int primary key identity not null,
+DoctorId int FOREIGN KEY REFERENCES doctors(Id) not null,
+Date Date not null,
+AvailableFrom DateTime not null,
+AvailableTo DateTime not null,
+AppointmentDuration int null
+)
+
+create table slots(
+Id int primary key identity not null,
+SlotStart DateTime,
+SlotEnd DateTime
+
+)
+
+create table appointments(
+Id int primary key identity not null,
+PatientId int not null foreign key references patients(Id),
+DoctorId int not null foreign key references doctors(Id),
+Date Date not null foreign key refences availability(Date),
+SlotId int not null foreign key references slots(Id),
+
+CONSTRAINT doctor_date_slot UNIQUE (DoctorId, Date, SlotId)
+
+)
+
+create table users(
+Id int primary key identity not null,
+UserName varchar (50) not null,
+LoginPassWord varchar (50) not null,
+UserRole varchar(10) not null CHECK (UserRole IN('Admin','Doctor','Patient')),
+DoctorId int FOREIGN KEY REFERENCES doctors(Id)  null,
+PatientId int FOREIGN KEY REFERENCES patients(Id) null,
+
+)

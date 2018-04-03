@@ -117,3 +117,102 @@ StartTime                   | EndTime
 ...                         | ...
 2015-01-05 14:30:00.0000000 | 2015-01-05 15:15:00.0000000
 2015-01-05 15:15:00.0000000 | 2015-01-05 16:00:00.0000000
+
+
+different project in one solution
+It is not uncommon to have more than one 'Project in a .NET 'Solution; in fact, many articles on CodeProject have downloadable examples which have many Projects in one 'Solution.
+
+The general pattern for allowing the end-user at run-time to select which Project is "opened" is:
+
+1. in the Application Main Form (or, Main Project: the one you have set as the 'Start-Up Project)
+
+a. add a reference to the other Projects:
+
+Select 'References in the Main Project, click 'Add Reference: depending on the version of Visual Studio you use look for a Tab named something like 'Solutions/Projects, and select the other Projects.
+
+b. in the Main Form within the Main Project:
+
+add 'using statements to allow the Main Project access to the other Projects; for example:
+
+using Project1;
+using Project2;
+
+At this point you have two choices on how to open/run the other Projects:
+
+1. use the exposed 'Form object of the other Projects to create a new instance of it, and then call 'Show on the new instance.
+
+2. use Process.Start
+
+a. if use Process.Start, your Main Form must have access to the System.Diagnostics facility:
+
+using System.Diagnotics;
+
+So, if you had in one Solution: a Main Project, and two other Projects, Project1, and Project2, you might have code like this:
+Hide   Expand    Copy Code
+// other standard 'using statements
+using Project1;
+using Project2;
+using System.Diagnotics;
+
+// for use with 'Show from the Main Form
+private Project1.Project1Form proj1Window;
+private Project2.Project2Form proj2Window;
+
+// which method to use for activating other Projects ?
+private bool IsActivatedWithShow = true;
+
+private void MainForm_Load(object sender, EventArgs e)
+{
+    // create the instances of Project1 and Project2's Forms
+    proj1Window = new Project1.Project1Form();
+    proj2Window = new Project2.Project2Form();
+}
+
+// 'button1 is a Button on the Main Form
+private void button1_Click(object sender, EventArgs e)
+{
+    if (IsActivatedWithShow)
+    {
+        // Showing the Form in Project1 without "running" Project1
+        // on a separate thread
+        proj1Window.Show();
+    }
+    else
+    {
+         // using Process.Start
+         Process.Start("Project1");
+    }
+}
+
+// button2 is a Button on the Main Form
+private void button2_Click(object sender, EventArgs e)
+{
+    if (IsActivatedWithShow)
+    {
+        // Showing the Form in Project2 without "running" Project2
+        // on a separate thread
+        proj2Window.Show();
+    }
+    else
+    {
+         // using Process.Start
+         Process.Start("Project2");
+    }
+}
+Discussion:
+
+1. using either the method of calling 'Show, or 'Process.Start: the static 'Main method in the Program.cs Class of both other Projects will never be called: but it must be there for compilation to take place.
+
+2. if you use 'Show then when you close the Main Form, the other Projects' Forms will be closed automatically.
+
+3. if you use Process.Start, closing the Main Form will not automatically close the Project Forms you have activated with Process.Start. This is because you have launched the other Project(s) on their own thread(s).
+
+4. References:
+
+Project.Start (.NET FrameWork 3.0 MSDN): [^]
+
+Process Class (.NET FrameWork 3.0 MSDN): [^]
+
+5. for future use:
+
+Using Process.Start(ProjectName) returns a reference to an instance of the 'Process Class; in the code above, we don't preserve that instance. In the future you may wish to "capture" the instance reference, since you can then, as you need to, use the 'Kill operator to shut-down the instance.

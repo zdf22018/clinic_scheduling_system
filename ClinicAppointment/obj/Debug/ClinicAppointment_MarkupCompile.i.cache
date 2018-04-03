@@ -4,16 +4,28 @@
 winexe
 C#
 .cs
+<<<<<<< HEAD
 C:\2018-ipd12-dotnet\ProjectDotNet2JQDF_Git\ClinicAppointment\obj\Debug\
+=======
+D:\clinic\clinic_scheduling_system\ClinicAppointment\obj\Debug\
+>>>>>>> 1280d18e80422c37a77e31f092ccdb6053b7bcc7
 ClinicAppointment
 none
 false
 DEBUG;TRACE
+<<<<<<< HEAD
 C:\2018-ipd12-dotnet\ProjectDotNet2JQDF_Git\ClinicAppointment\App.xaml
 4482546303
 
 12-1686909086
 13738642453
+=======
+D:\clinic\clinic_scheduling_system\ClinicAppointment\App.xaml
+4482546303
+21750853300
+25990877312
+161287442612
+>>>>>>> 1280d18e80422c37a77e31f092ccdb6053b7bcc7
 Doctor.xaml;MainWindow.xaml;Admin.xaml;Patient.xaml;
 
 True

@@ -15,6 +15,7 @@ doctor
 patient
 admin
 
+<<<<<<< HEAD
 Jianqiu:
 to do: build the database
 build gui for doctor
@@ -25,4 +26,15 @@ day6
 Jianqiu Chen 
 
 Build all UIs for different users
+=======
+day 3 March 28
+Dongfan
+finalize the database schema
+created two triggers to automate the time slots and user insert
+found a third party devexpress schedulor product to use
+
+to do
+understand the multiple projects inside one solution 
+and then set up the project properly
+>>>>>>> 1280d18e80422c37a77e31f092ccdb6053b7bcc7
 

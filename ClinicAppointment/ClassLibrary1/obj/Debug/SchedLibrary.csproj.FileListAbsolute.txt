@@ -1,0 +1,5 @@
+D:\clinic\clinic_scheduling_system\ClinicAppointment\ClassLibrary1\bin\Debug\ClassLibrary1.dll
+D:\clinic\clinic_scheduling_system\ClinicAppointment\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
+D:\clinic\clinic_scheduling_system\ClinicAppointment\ClassLibrary1\obj\Debug\SchedLibrary.csproj.CoreCompileInputs.cache
+D:\clinic\clinic_scheduling_system\ClinicAppointment\ClassLibrary1\obj\Debug\ClassLibrary1.dll
+D:\clinic\clinic_scheduling_system\ClinicAppointment\ClassLibrary1\obj\Debug\ClassLibrary1.pdb

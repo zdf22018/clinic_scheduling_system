@@ -45,17 +45,10 @@ namespace ProjectDotNet2JQDF
                 DoctorDlg.ShowDialog();
             }
 
-            else if (selectedProfile == "reception")
-            {
-                //TODO: more code to add to cope with database
-                ReceptionProfileDlg ReceptionDlg = new ReceptionProfileDlg();
-                ReceptionDlg.ShowDialog();
-            }
-
             else if (selectedProfile == "administration")
             {
                 //TODO: more code to add to cope with database
-                AdminProfileDlg AdminProfile= new AdminProfileDlg();
+                AdminProfileDlg.MainWindow AdminProfile = new AdminProfileDlg.MainWindow();
                 AdminProfile.ShowDialog();
             }
 

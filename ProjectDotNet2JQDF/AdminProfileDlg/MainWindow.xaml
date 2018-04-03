@@ -1,11 +1,11 @@
-﻿<Window x:Class="ProjectDotNet2JQDF.PatientProfileDlg"
+﻿<Window x:Class="AdminProfileDlg.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProjectDotNet2JQDF"
+        xmlns:local="clr-namespace:AdminProfileDlg"
         mc:Ignorable="d"
-        Title="PatientProfileDlg" Height="300" Width="300">
+        Title="MainWindow" Height="350" Width="525">
     <Grid>
         
     </Grid>

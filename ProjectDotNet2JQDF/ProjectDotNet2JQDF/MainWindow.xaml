@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectDotNet2JQDF"
         mc:Ignorable="d"
-        Title="JQDF clinic log In" Height="500" Width="525">
+        Title="JQDF clinic Administration log In" Height="500" Width="525">
     <Window.Background>
         <RadialGradientBrush>
             <GradientStop Color="#FF82E472" Offset="0"/>
@@ -14,14 +14,6 @@
     </Window.Background>
     <Grid Height="472" VerticalAlignment="Top" Margin="0,0,0,-3">
         <Label Content="Welcome to JQDF Clinic" HorizontalAlignment="Left" Margin="152,38,0,0" VerticalAlignment="Top" Width="186" FontSize="16"/>
-        <Label Content="Select Your Profile" HorizontalAlignment="Left" Margin="95,94,0,0" VerticalAlignment="Top" Width="121"/>
-        <ComboBox x:Name="cbProfile" HorizontalAlignment="Left" Margin="256,94,0,0" VerticalAlignment="Top" Width="120">
-            <ComboBoxItem IsSelected="True">Please Select Your type</ComboBoxItem>
-            <ComboBoxItem>Administration</ComboBoxItem>
-            <ComboBoxItem>Doctor</ComboBoxItem>
-            <ComboBoxItem>Reception</ComboBoxItem>
-            <ComboBoxItem>Patient</ComboBoxItem>
-        </ComboBox>
         <Label Content="User ID" HorizontalAlignment="Left" Margin="95,164,0,0" VerticalAlignment="Top" Width="121"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="256,164,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="256,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>

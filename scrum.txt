@@ -15,4 +15,14 @@ doctor
 patient
 admin
 
+Jianqiu:
+to do: build the database
+build gui for doctor
+challenge: understand the structure of several projects inside a project
+
+day6
+
+Jianqiu Chen 
+
+Build all UIs for different users
 

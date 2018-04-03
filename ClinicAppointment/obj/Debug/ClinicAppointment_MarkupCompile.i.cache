@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\ITC\Documents\clinic\ClinicAppointment\obj\Debug\
+C:\2018-ipd12-dotnet\ProjectDotNet2JQDF_Git\ClinicAppointment\obj\Debug\
 ClinicAppointment
 none
 false
 DEBUG;TRACE
-C:\Users\ITC\Documents\clinic\ClinicAppointment\App.xaml
+C:\2018-ipd12-dotnet\ProjectDotNet2JQDF_Git\ClinicAppointment\App.xaml
 4482546303
 
-121585970835
+12-1686909086
 13738642453
 Doctor.xaml;MainWindow.xaml;Admin.xaml;Patient.xaml;
 
-False
+True
 

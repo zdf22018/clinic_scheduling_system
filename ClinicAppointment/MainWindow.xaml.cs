@@ -24,5 +24,35 @@ namespace ClinicAppointment
         {
             InitializeComponent();
         }
+
+        /*
+         * btLogInClick pops up different window all depending on 
+         * what user entered as type, so we do conditional statements 
+         * here
+         */
+        private void btLogIn_Click(object sender, RoutedEventArgs e)
+        {
+            var comboBoxItem = cbProfile.Items[cbProfile.SelectedIndex] as ComboBoxItem;
+            string selectedProfile = comboBoxItem.Content.ToString().ToLower();
+            if (selectedProfile == "" || selectedProfile == "please select your type")
+            {
+                return;
+            }
+            else if (selectedProfile == "doctor")
+            {
+                //TODO: more code to add to cope with database
+                Doctor.MainWindow newForm = new Doctor.MainWindow();
+
+                newForm.Show();  // or newForm.ShowDialog();
+            }
+        }
+
+        private void btExit_Click(object sender, RoutedEventArgs e)
+        {
+            //no dialog pops out
+            DialogResult = false;
+            //safely exit app
+            Environment.Exit(0);
+        }
     }
 }

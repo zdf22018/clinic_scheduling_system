@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\2018-ipd12-dotnet\ProjectDotNet2JQDF\ProjectDotNet2JQDF\obj\Debug\
+C:\2018-ipd12-dotnet\ProjectDotNet2JQDF_Git\ProjectDotNet2JQDF\ProjectDotNet2JQDF\obj\Debug\
 ProjectDotNet2JQDF
 none
 false
 DEBUG;TRACE
-C:\2018-ipd12-dotnet\ProjectDotNet2JQDF\ProjectDotNet2JQDF\App.xaml
-5930189962
+C:\2018-ipd12-dotnet\ProjectDotNet2JQDF_Git\ProjectDotNet2JQDF\ProjectDotNet2JQDF\App.xaml
+11151548125
 
-91962557822
+5-2017746502
 131569487696
-AdminProfileDlg.xaml;DoctorProfileDlg.xaml;MainWindow.xaml;PatientProfileDlg.xaml;ReceptionProfileDlg.xaml;
+MainWindow.xaml;
 
-False
+True
 
